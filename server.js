@@ -1,8 +1,15 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+var express = require("express");
+var bodyParser = require("body-parser");
+var flash = require('connect-flash');
+var app = express();
+var path = require('path)');
+var User = require('./models/user');
+var fileUpload = require('express-fileupload');
+var methodOverride = require('method-override');
+var cors = require('cors');
 
-const app = express();
-
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 // parse requests of content-type: application/json
 app.use(bodyParser.json());
 
