@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require("../models/user");
 var MD5 = require("crypto-js/md5");
+var jwt = require("jsonwebtoken");
 
 /* GET home page. */
 router.get('/', function(request, response) {
