@@ -1,15 +1,14 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var flash = require('connect-flash');
+var flash = require('req-flash');
 var app = express();
-var path = require('path)');
-var User = require('./models/user');
+var path = require('path');
+var User = require('./app/models/user');
 var fileUpload = require('express-fileupload');
-var methodOverride = require('method-override');
-var cors = require('cors');
+// var cors = require('cors');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
 // parse requests of content-type: application/json
 app.use(bodyParser.json());
 
