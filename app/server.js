@@ -1,33 +1,48 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var flash = require('req-flash');
-var app = express();
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 var path = require('path');
 var User = require('./models/user');
 var fileUpload = require('express-fileupload');
-// var cors = require('cors');
-const port = 12345;
-var db = require('./models/db');
-global.db = db;
-
+var methodOverride = require('method-override');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-//configure middleware
-app.set('port', process.env.port || port); // set express to use this port
-app.set('views', __dirname + '/views'); // set express to look in this folder to render our view
-app.set('view engine', 'ejs'); // configure template engine
-app.use(bodyParser.json()); // parse requests of content-type: application/json
-app.use(bodyParser.urlencoded({ extended: true })); // parse requests of content-type: application/x-www-form-urlencoded
-app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
+var app = express();
 
-// simple route
-app.get("/", (req, res) => {
-    res.json({ message: "welcome." });
-});
-
+const port = 12345;
+var db = require('./models/db');
+global.db = db;
 // set port, listen for requests
-app.listen(3000, () => {
-    console.log("Server is running on port 3000.");
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}.`);
 });
+
+//views engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload());
+app.use(methodOverride("_method"));
+app.use(cors());
+
+app.get("/", function (request,response){
+    response.render('login.ejs', {
+        title: 'cmpt470',
+        message: 'grade  database',
+    });
+
+});
+
+
+module.exports = app;

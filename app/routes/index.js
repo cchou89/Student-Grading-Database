@@ -9,37 +9,18 @@ router.get('/', function(request, response) {
     response.render('home');
 });
 
-/* show login form */
-router.get("/login", function(request, response){
-    response.render('login');
-});
 
 //handling login logic
-router.post("/login", function(request, response){
+router.post("/", function(request, response){
     var username = request.body.username;
     var password = request.body.password;
 
     User.findByUsername(username, function (error, result) {
         if(error){
             request.flash("error", err.message);
-            return response.render("login");
+            return response.render("home");
         }
-
-    });
-
-    var newLecture = {name: request.body.name,
-        author: request.user._id ,
-    };
-    Lecture.create(newLecture, function (error) {
-        if(error){
-            request.flash('error', "Could not create the lecture");
-            response.redirect("/lectures/new");
-        } else {
-            //redirect back to index
-            response.redirect("/lectures");
-        }
-    });
-
+    })
 });
 
 // logout route
