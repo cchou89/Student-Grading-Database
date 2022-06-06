@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+</nav>
+<div class="container">
+
+    <% if(message && message.length > 0){ %>
+        <div class="alert alert-success" role="alert">
+            <%= message %>
+        </div>
+    <% } %>
+</div>

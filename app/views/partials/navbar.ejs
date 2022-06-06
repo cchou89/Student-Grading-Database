@@ -1,0 +1,17 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand"><%= title %></a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">Home</a></li>
+                <li><a href="/users">Grades</a></li>
+                <% if(session.username){ %>
+                    <li style="float:right"><a> Hello <%= session.username%></a></li>
+                    <li style="float:right"><a class="active" href="/logout">Logout</a></li>
+                <%}%>
+            </ul>
+        </div>
+    </div>
+</nav>
