@@ -1,0 +1,39 @@
+<div>
+    <%if(gradeCounts!==null && letterGrade !==null){%>
+    <table>
+        <tbody>
+        <%    var row =0;%>
+        <tr>
+            <%for(var i= 0; i< 11; i++){
+                if(gradeCounts[letterGrade[i]] >row){
+                    //get total number of rows needed
+                    row = gradeCounts[letterGrade[i]];
+                }
+            }%>
+        </tr>
+        <%while(row > 0){%>
+        <tr>
+            <td><%=row%></td>
+            <%for(var j= 0; j< 11; j++){
+                if(gradeCounts[letterGrade[j]] >= row){%>
+                <td>O</td>
+            <%}
+                else{%>
+                <td><%=gradeCounts[letterGrade[i]]%></td>
+                <%}
+            }
+            row-=1;%>
+        </tr>
+        <%}%>
+        <tfoot>
+            <tr>
+                <td>#</td>
+                <%letterGrade.forEach(grade =>{%>
+                <td><%=grade%></td>
+                <%});%>
+            </tr>
+            </tfoot>
+        </tbody>
+    </table>
+    <%}%>
+</div>

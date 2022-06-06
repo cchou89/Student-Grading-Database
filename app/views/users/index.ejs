@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <title></title>
+    </head>
+    <body>
+    <% include ../partials/navbar %>
+
+        <div style="width: 30%; margin: 25px auto;" >
+            <h1>Compile Grades</h1>
+            <div class="row text-center">
+                <% if( tableHeaders !== null && json !== null){%>
+                <table cellspacing="10">
+                    <tr>
+                    <%tableHeaders.forEach(function(header){%>
+                        <th><%=header%></th>
+                    <%})%>
+                    </tr>
+                    <%json.forEach(function (record) {
+                        if(record.studentID === 'total'){%>
+                    <tr>
+                    <%tableHeaders.forEach(function(header){%>
+                    <td style="color: darkred"><%=record[header]%></td>
+                        <%})%>
+                    </tr>
+                    <%}else{%>
+                    <tr>
+                        <%tableHeaders.forEach(function(header){%>
+                        <td><%=record[header]%></td>
+                        <%})%>
+                    </tr>
+                    <%}
+                    })%>
+                </table>
+                <%}%>
+            </div>
+            <br>
+            <% include ../partials/histogram.ejs %>
+            <br>
+            <div>
+            <form ref= uploadForm
+                  id = uploadForm
+                  action="/users/compile"
+                  method="post"
+                  encType="multipart/form-data">
+                <div class="form-group">
+                    <label>CSV File:
+                        <input name="csvfile" type="file" required>
+                        <input type='submit' value='Upload!' />
+                    </label>
+                </div>
+                <br>
+                <h2>Cutoffs:</h2>
+                <div id= 'cutoffs' class="form-group">
+                    <%
+                    if(letterGrade !== null && cutoffs !==null){
+                        for(var i = 0; i<10; i++){%>
+                        <label><%=letterGrade[i]%><br>
+                            <input type="number" name="grade" value="<%=cutoffs[i]%>" onchange="adjustCutoff()" required><br>
+                        </label>
+                    <%}
+                        }else{%>
+                        <label>A+:<br>
+                            <input type="number" name="grade" value="90" onchange="adjustCutoff()" required><br>
+                        </label>
+                        <label>A:<br>
+                            <input type="number" name="grade" value="85" onchange="adjustCutoff()" required><br>
+                        </label>
+                        <label>A-:<br>
+                            <input type="number" name="grade" value="80" required><br>
+                        </label>
+                        <label>B+:<br>
+                            <input type="number" name="grade" value="77" required><br>
+                        </label>
+                        <label>B:<br>
+                            <input type="number" name="grade" value="73" required><br>
+                        </label>
+                        <label>B-:<br>
+                            <input type="number" name="grade" value="70" required><br>
+                        </label>
+                        <label>C+:<br>
+                            <input type="number" name="grade" value="67" required><br>
+                        </label>
+                        <label>C:<br>
+                            <input type="number" name="grade" value="63" required><br>
+                        </label>
+                        <label>C-:<br>
+                            <input type="number" name="grade" value="60" required><br>
+                        </label>
+                        <label>D:<br>
+                            <input type="number" name="grade" value="50" required><br>
+                        </label>
+                    <%}%>
+                </div>
+            </form>
+        </div>
+        </div>
+    </body>
+    <script>
+        function adjustCutoff(){
+            var labels = document.getElementById('cutoffs').children;
+            for(var i = 0; i<10 ; i++){
+                for(var j = 1; j<10 ; j++){
+                    var cutoff = parseFloat(labels[i].children[0].value);
+                    console.log(cutoff)
+                    var cutoff2 = parseFloat(labels[j].children[0].value);
+                    if(cutoff === cutoff2){
+                        cutoff++;
+                    }else if(cutoff2 > cutoff){
+                        cutoff2= cutoff-0.01;
+                    }
+                    labels[i].children[0].value = cutoff;
+                    labels[j].children[0].value =cutoff2;
+                }
+            }
+        }
+    </script>
+</html>

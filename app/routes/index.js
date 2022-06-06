@@ -1,33 +1,50 @@
 var express = require('express');
 var router = express.Router();
-var User = require("../models/user");
-var MD5 = require("crypto-js/md5");
-var jwt = require("jsonwebtoken");
+var query = require('../public/javascripts/query');
+var db= require('../models/db');
+var crypto = require('crypto-js/md5');
 
 /* GET home page. */
-router.get('/', function(request, response) {
-    response.render('home');
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'CMPT Final Project' , session: req.session, error: null});
 });
 
-
-//handling login logic
-router.post("/", function(request, response){
+router.post('/login', async function(request, response){
     var username = request.body.username;
     var password = request.body.password;
 
-    User.findByUsername(username, function (error, result) {
-        if(error){
-            request.flash("error", err.message);
-            return response.render("home");
-        }
-    })
+  //verify username and password
+    await query(
+        db,
+        "SELECT * FROM `users` where username = '" + username + "'"
+    )
+        .catch(function(error){
+            request.flash('error', 'incorrect credentials');
+            response.redirect('/')
+        })
+        .then(function(result) {
+          //set user session
+          var hashedPass = crypto(password);
+          if(hashedPass.toString() === result[0].password){
+              request.session.username = result[0].username;
+              //move to user page
+              response.redirect('/users');
+          }else{
+              response.redirect('/');
+          }})
+        .catch(function(error){
+            request.flash('error', 'incorrect credentials');
+            response.redirect('/');
+      });
 });
 
-// logout route
-router.get("/logout", function(request, response){
-    request.logout();
-    request.flash('message', 'Logged out');
-    response.redirect("/");
+router.get('/logout', function(request, response){
+    if(request.session.username && request.cookies.session_id){
+        response.clearCookie('session_id');
+        response.redirect('../');
+    }else{
+        response.redirect('/login');
+    }
 });
 
 module.exports = router;

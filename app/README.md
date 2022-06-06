@@ -1,2 +1,1 @@
-# CMPT 470 Final Project - grade database
-
+Docker identifier: ckc21/cmpt470-final-exam
